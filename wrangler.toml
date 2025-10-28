@@ -3,4 +3,4 @@ main = "src/index.js"
 compatibility_date = "2025-10-28"
 
 [ai]
-binding = "AI"
+binding = "cfchat_binding"

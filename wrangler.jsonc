@@ -12,9 +12,9 @@
 	},
 
   // Bind the Workers AI service
-  "ai": {
-	"binding": "AI"
-  }
+	"ai": {
+		"binding": "cfchat_binding"
+	}
 }
 
 	/**
