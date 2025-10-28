@@ -19,19 +19,23 @@ export default {
 
     // Call a Workers AI model (example model id from Cloudflare catalog)
     const modelId = "@cf/meta/llama-3.1-8b-instruct"; // example - pick from the Models page
-    const aiResponse = await env.AI.run(modelId, {
-      prompt: prompt,
-      // use scoped prompts / messages for chat-style interfaces (see docs)
-      // other options: max_tokens, temperature, streaming, etc.
-      max_tokens: 400
-    });
-
-    // aiResponse is a Response-like object; get JSON or text as needed:
-    const text = await aiResponse.text();
-
-    // Optionally store conversation state (see next step)
-    return new Response(JSON.stringify({ reply: text }), {
-      headers: { "Content-Type": "application/json" }
-    });
+    try {
+      const aiResponse = await env.cfchat_binding.run(modelId, {
+        prompt: prompt,
+        max_tokens: 400
+      });
+      // Log the full response for debugging
+      console.log("AI Response:", aiResponse);
+      const text = aiResponse.result;
+      return new Response(JSON.stringify({ reply: text, raw: aiResponse }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    } catch (error) {
+      console.log("AI Error:", error);
+      return new Response(JSON.stringify({ error: error.message || "AI model call failed" }), {
+        headers: { "Content-Type": "application/json" },
+        status: 500
+      });
+    }
   }
 }
