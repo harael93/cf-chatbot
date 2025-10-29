@@ -1,7 +1,7 @@
 const corsHeaders = {
-	"Access-Control-Allow-Origin": "https://psychicchat.pages.dev/",
-	"Access-Control-Allow-Methods": "POST, OPTIONS",
-	"Access-Control-Allow-Headers": "Content-Type"
+  "Access-Control-Allow-Origin": "https://psychicchat.pages.dev",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type"
 };
 
 export const onRequestOptions = async () => {
