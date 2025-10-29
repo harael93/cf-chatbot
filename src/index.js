@@ -1,7 +1,8 @@
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://psychicchat.pages.dev",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type"
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Credentials": "true"
 };
 
 export const onRequestOptions = async () => {
@@ -10,9 +11,15 @@ export const onRequestOptions = async () => {
 		headers: corsHeaders
 	});
 };
-
 export default {
   async fetch(request, env) {
+    if (request.method === "OPTIONS") {
+      // Handle CORS preflight
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders
+      });
+    }
     if (request.method !== "POST") {
       return new Response("POST only", {
         status: 405,
@@ -20,6 +27,7 @@ export default {
       });
     }
 
+   
     const { prompt, history } = await request.json();
 
     // Call a Workers AI model (example model id from Cloudflare catalog)
