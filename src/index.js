@@ -13,7 +13,12 @@ export const onRequestOptions = async () => {
 
 export default {
   async fetch(request, env) {
-    if (request.method !== "POST") return new Response("POST only", { status: 405 });
+    if (request.method !== "POST") {
+      return new Response("POST only", {
+        status: 405,
+        headers: corsHeaders
+      });
+    }
 
     const { prompt, history } = await request.json();
 
@@ -28,12 +33,18 @@ export default {
       console.log("AI Response:", aiResponse);
       const text = aiResponse.result;
       return new Response(JSON.stringify({ reply: text, raw: aiResponse }), {
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json"
+        }
       });
     } catch (error) {
       console.log("AI Error:", error);
       return new Response(JSON.stringify({ error: error.message || "AI model call failed" }), {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json"
+        },
         status: 500
       });
     }
